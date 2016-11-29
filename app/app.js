@@ -21,7 +21,7 @@ angular
         templateUrl: 'home/home.html',
         resolve: {
           requireNoAuth: function($state, Auth){
-            return Auth.$requireAuth().then(function(auth){
+            return Auth.$requireSignIn().then(function(auth){
               $state.go('channels');
             }, function(error){
               return;
@@ -35,7 +35,7 @@ angular
         templateUrl: 'auth/login.html',
         resolve: {
           requireNoAuth: function($state, Auth){
-            return Auth.$requireAuth().then(function(auth){
+            return Auth.$requireSignIn().then(function(auth){
               $state.go('home');
             }, function(error){
               return;
@@ -49,7 +49,7 @@ angular
         templateUrl: 'auth/register.html',
         resolve: {
           requireNoAuth: function($state, Auth){
-            return Auth.$requireAuth().then(function(auth){
+            return Auth.$requireSignIn().then(function(auth){
               $state.go('home');
             }, function(error){
               return;
@@ -63,12 +63,12 @@ angular
         templateUrl: 'users/profile.html',
         resolve: {
           auth: function($state, Users, Auth){
-            return Auth.$requireAuth().catch(function(){
+            return Auth.$requireSignIn().catch(function(){
               $state.go('home');
             });
           },
           profile: function(Users, Auth){
-            return Auth.$requireAuth().then(function(auth){
+            return Auth.$requireSignIn().then(function(auth){
               return Users.getProfile(auth.uid).$loaded();
             });
           }
@@ -83,7 +83,7 @@ angular
             return Channels.$loaded();
           },
           profile: function ($state, Auth, Users){
-            return Auth.$requireAuth().then(function(auth){
+            return Auth.$requireSignIn().then(function(auth){
               return Users.getProfile(auth.uid).$loaded().then(function (profile){
                 if(profile.displayName){
                   return profile;
@@ -133,4 +133,19 @@ angular
 
     $urlRouterProvider.otherwise('/');
   })
-  .constant('FirebaseUrl', 'https://slack.firebaseio.com/');
+  .config(function(){
+    // Replace this config with your Firebase's config.
+    // Config for your Firebase can be found using the "Web Setup"
+    // button on the top right of the Firebase Dashboard in the
+    // "Authentication" section.
+
+    var config = {
+      apiKey: "AIzaSyB9CfYaX5m2_hJXvkGxzlLEluz-MFI0aG8",
+      authDomain: "angularfire-slack-d6b07.firebaseapp.com",
+      databaseURL: "https://angularfire-slack-d6b07.firebaseio.com",
+      storageBucket: "angularfire-slack-d6b07.appspot.com",
+      messagingSenderId: "391145331772"
+    };
+
+    firebase.initializeApp(config);
+  });

@@ -18,15 +18,16 @@ angular.module('angularfireSlackApp')
 
     channelsCtrl.createChannel = function(){
       channelsCtrl.channels.$add(channelsCtrl.newChannel).then(function(ref){
-        $state.go('channels.messages', {channelId: ref.key()});
+        $state.go('channels.messages', {channelId: ref.key});
       });
     };
 
     channelsCtrl.logout = function(){
       channelsCtrl.profile.online = null;
       channelsCtrl.profile.$save().then(function(){
-        Auth.$unauth();
-        $state.go('home');
+        Auth.$signOut().then(function(){
+          $state.go('home');
+        });
       });
     };
   });
