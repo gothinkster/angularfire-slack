@@ -17,7 +17,7 @@ angular.module('angularfireSlackApp')
 
     authCtrl.register = function (){
       Auth.$createUserWithEmailAndPassword(authCtrl.user.email, authCtrl.user.password).then(function (user){
-        authCtrl.login();
+        $state.go('home');
       }, function (error){
         authCtrl.error = error;
       });
